@@ -10,24 +10,28 @@ import javax.xml.parsers.SAXParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
 
 @Service
 public class AnalyzeService {
 
     private final SAXParser saxParser;
-    private final PostHandler postHandler;
 
     @Autowired
     public AnalyzeService(SAXParser saxParser, PostHandler postHandler) {
         this.saxParser = saxParser;
-        this.postHandler = postHandler;
     }
 
     public AnalyzeResponseDTO analyzeFile(URL fileUrl) {
         try {
-            LocalDateTime analyseDate = LocalDateTime.now();
+            ZonedDateTime analyseDate = ZonedDateTime.now();
+            Clock.systemDefaultZone().getZone();
+
             InputStream inputStream = fileUrl.openStream();
+            PostHandler postHandler = new PostHandler();
             saxParser.parse(inputStream, postHandler);
             return new AnalyzeResponseDTO(analyseDate, postHandler.getResults());
         } catch (SAXException e) {

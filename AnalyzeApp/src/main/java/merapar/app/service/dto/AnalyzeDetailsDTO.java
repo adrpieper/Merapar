@@ -3,17 +3,18 @@ package merapar.app.service.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class AnalyzeDetailsDTO {
-    private final LocalDateTime firstPost;
-    private final LocalDateTime lastPost;
+    private final ZonedDateTime firstPost;
+    private final ZonedDateTime lastPost;
     private final int totalPosts;
     private final int totalAcceptedPosts;
     private final int avgScore;
 
     AnalyzeDetailsDTO(
-            @JsonProperty("firstPost") LocalDateTime firstPost,
-            @JsonProperty("lastPost") LocalDateTime lastPost,
+            @JsonProperty("firstPost") ZonedDateTime firstPost,
+            @JsonProperty("lastPost") ZonedDateTime lastPost,
             @JsonProperty("totalPosts") int totalPosts,
             @JsonProperty("totalAcceptedPosts") int totalAcceptedPosts,
             @JsonProperty("avgScore") int avgScore) {
@@ -24,11 +25,11 @@ public class AnalyzeDetailsDTO {
         this.avgScore = avgScore;
     }
 
-    public LocalDateTime getFirstPost() {
+    public ZonedDateTime getFirstPost() {
         return firstPost;
     }
 
-    public LocalDateTime getLastPost() {
+    public ZonedDateTime getLastPost() {
         return lastPost;
     }
 

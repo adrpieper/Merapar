@@ -9,7 +9,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,8 +20,8 @@ public class PostHandlerTest {
 
     private static final AnalyzeDetailsDTO SMALL_FILE_DETAILS = new AnalyzeDetailsDTOBuilder()
             .withAvgScore(20/8)
-            .withFirstPost(LocalDateTime.of(2015,7,14,18,39,27,757000000))
-            .withLastPost(LocalDateTime.of(2015,8,14,22,2,58,73000000))
+            .withFirstPost(ZonedDateTime.of(2015,7,14,18,39,27,757000000, Clock.systemUTC().getZone()))
+            .withLastPost(ZonedDateTime.of(2015,8,14,22,2,58,73000000, Clock.systemUTC().getZone()))
             .withTotalPosts(8)
             .build();
 

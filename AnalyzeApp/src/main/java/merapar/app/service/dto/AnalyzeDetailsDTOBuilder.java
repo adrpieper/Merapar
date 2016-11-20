@@ -1,20 +1,20 @@
 package merapar.app.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class AnalyzeDetailsDTOBuilder {
-    private LocalDateTime firstPost;
-    private LocalDateTime lastPost;
+    private ZonedDateTime firstPost;
+    private ZonedDateTime lastPost;
     private int totalPosts;
     private int totalAcceptedPosts;
     private int avgScore;
 
-    public AnalyzeDetailsDTOBuilder withFirstPost(LocalDateTime firstPost) {
+    public AnalyzeDetailsDTOBuilder withFirstPost(ZonedDateTime firstPost) {
         this.firstPost = firstPost;
         return this;
     }
 
-    public AnalyzeDetailsDTOBuilder withLastPost(LocalDateTime lastPost) {
+    public AnalyzeDetailsDTOBuilder withLastPost(ZonedDateTime lastPost) {
         this.lastPost = lastPost;
         return this;
     }

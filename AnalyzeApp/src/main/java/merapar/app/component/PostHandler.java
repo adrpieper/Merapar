@@ -7,9 +7,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
-@Component
 public class PostHandler extends DefaultHandler {
     private long scoreSum;
     private int rows;
@@ -48,10 +50,14 @@ public class PostHandler extends DefaultHandler {
     public AnalyzeDetailsDTO getResults() {
         return new AnalyzeDetailsDTOBuilder()
                 .withAvgScore(getAvgScore())
-                .withFirstPost(firstPost)
-                .withLastPost(lastPost)
+                .withFirstPost(toZonedDT(firstPost))
+                .withLastPost(toZonedDT(lastPost))
                 .withTotalPosts(rows)
                 .build();
+    }
+
+    private ZonedDateTime toZonedDT(LocalDateTime localDateTime) {
+        return ZonedDateTime.ofInstant(localDateTime, ZoneOffset.UTC, Clock.systemUTC().getZone());
     }
 
     private int getAvgScore() {
