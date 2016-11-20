@@ -27,17 +27,22 @@ public class PostHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if (qName.equalsIgnoreCase("row")) {
-            rows ++;
-            scoreSum += Integer.parseInt(attributes.getValue("Score"));
-            LocalDateTime creationDate = LocalDateTime.parse(attributes.getValue("CreationDate"));
-            if (creationDate.isBefore(firstPost)) {
-                firstPost = creationDate;
+        try {
+            if (qName.equalsIgnoreCase("row")) {
+                rows ++;
+                scoreSum += Integer.parseInt(attributes.getValue("Score"));
+                LocalDateTime creationDate = LocalDateTime.parse(attributes.getValue("CreationDate"));
+                if (creationDate.isBefore(firstPost)) {
+                    firstPost = creationDate;
+                }
+                if (creationDate.isAfter(lastPost)) {
+                    lastPost= creationDate;
+                }
             }
-            if (creationDate.isAfter(lastPost)) {
-                lastPost= creationDate;
-            }
+        }catch (Exception e){
+            throw new SAXException(e);
         }
+
     }
 
     public AnalyzeDetailsDTO getResults() {

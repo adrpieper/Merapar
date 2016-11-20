@@ -30,8 +30,10 @@ public class AnalyzeService {
             InputStream inputStream = fileUrl.openStream();
             saxParser.parse(inputStream, postHandler);
             return new AnalyzeResponseDTO(analyseDate, postHandler.getResults());
-        } catch (SAXException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new BadFileStructure(e.getCause());
+        } catch (IOException e) {
+            throw new FileNotFoundException(fileUrl);
         }
     }
 }
