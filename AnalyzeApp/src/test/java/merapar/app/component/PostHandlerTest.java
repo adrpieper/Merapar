@@ -1,5 +1,5 @@
-import merapar.app.component.PostHandler;
-import merapar.app.component.SmallFileAnalyze;
+package merapar.app.component;
+
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -9,7 +9,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostHandlerTest {
     private PostHandler underTest = new PostHandler();

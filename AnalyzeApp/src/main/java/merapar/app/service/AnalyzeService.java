@@ -21,7 +21,7 @@ public class AnalyzeService {
     private final SAXParser saxParser;
 
     @Autowired
-    public AnalyzeService(SAXParser saxParser, PostHandler postHandler) {
+    public AnalyzeService(SAXParser saxParser) {
         this.saxParser = saxParser;
     }
 

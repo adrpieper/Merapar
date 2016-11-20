@@ -1,12 +1,19 @@
 package merapar.app.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import merapar.app.controller.dto.jackson.ZonedDateTimeDeserializer;
+import merapar.app.controller.dto.jackson.ZonedDateTimeSerializer;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public class AnalyzeDetailsDTO {
+    @JsonSerialize(using = ZonedDateTimeSerializer.class)
+    @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
     private final ZonedDateTime firstPost;
+    @JsonSerialize(using = ZonedDateTimeSerializer.class)
+    @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
     private final ZonedDateTime lastPost;
     private final int totalPosts;
     private final int totalAcceptedPosts;
