@@ -33,7 +33,7 @@ public class PostHandlerTest {
     }
 
     private void parseFile(String fileName) throws Exception {
-        InputStream inputStream = ClassLoader.getSystemClassLoader().getResource(fileName).openStream();
+        InputStream inputStream = ClassLoader.getSystemClassLoader().getResource("__files/"+fileName).openStream();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(inputStream, underTest);
