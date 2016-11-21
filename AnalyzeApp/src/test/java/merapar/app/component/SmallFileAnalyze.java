@@ -3,6 +3,7 @@ package merapar.app.component;
 import merapar.app.service.dto.AnalyzeDetailsDTO;
 import merapar.app.service.dto.AnalyzeDetailsDTOBuilder;
 
+import java.net.URL;
 import java.time.Clock;
 import java.time.ZonedDateTime;
 
@@ -15,5 +16,9 @@ public class SmallFileAnalyze {
                 .withLastPost(ZonedDateTime.of(2015,8,14,22,2,58,73000000, Clock.systemUTC().getZone()))
                 .withTotalPosts(8)
                 .build();
+    }
+
+    public static URL getURL(){
+        return ClassLoader.getSystemClassLoader().getResource("__files/small-file.xml");
     }
 }

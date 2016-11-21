@@ -1,4 +1,4 @@
-package merapar.app.service;
+package merapar.app.service.exceptions;
 
 public class BadFileStructure extends RuntimeException {
 

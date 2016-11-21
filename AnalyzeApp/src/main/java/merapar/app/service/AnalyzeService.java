@@ -1,41 +1,39 @@
 package merapar.app.service;
 
+import merapar.app.component.Analyzer;
 import merapar.app.component.PostHandler;
 import merapar.app.controller.dto.AnalyzeResponseDTO;
+import merapar.app.service.dto.AnalyzeDetailsDTO;
+import merapar.app.service.exceptions.UrlNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.SAXParser;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.TimeZone;
 
 @Service
 public class AnalyzeService {
 
-    private final SAXParser saxParser;
+    private final Analyzer analyzer;
 
     @Autowired
-    public AnalyzeService(SAXParser saxParser) {
-        this.saxParser = saxParser;
+    public AnalyzeService(Analyzer analyzer) {
+        this.analyzer = analyzer;
     }
 
     public AnalyzeResponseDTO analyzeFile(URL fileUrl) {
         try {
-            ZonedDateTime analyseDate = ZonedDateTime.now();
-            InputStream inputStream = fileUrl.openStream();
+            ZonedDateTime analyzeTime = ZonedDateTime.now();
+            InputStream inputStream = new BufferedInputStream(fileUrl.openStream());
             PostHandler postHandler = new PostHandler();
-            saxParser.parse(inputStream, postHandler);
-            return new AnalyzeResponseDTO(analyseDate, postHandler.getResults());
-        } catch (SAXException e) {
-            throw new BadFileStructure(e.getCause());
+            AnalyzeDetailsDTO detailsDTO = analyzer.analyze(inputStream, postHandler);
+            return new AnalyzeResponseDTO(analyzeTime, detailsDTO);
+
         } catch (IOException e) {
-            throw new FileNotFoundException(e,fileUrl);
+            throw new UrlNotFoundException(fileUrl,e);
         }
     }
 }
