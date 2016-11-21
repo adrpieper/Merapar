@@ -28,8 +28,6 @@ public class AnalyzeService {
     public AnalyzeResponseDTO analyzeFile(URL fileUrl) {
         try {
             ZonedDateTime analyseDate = ZonedDateTime.now();
-            Clock.systemDefaultZone().getZone();
-
             InputStream inputStream = fileUrl.openStream();
             PostHandler postHandler = new PostHandler();
             saxParser.parse(inputStream, postHandler);
@@ -37,7 +35,7 @@ public class AnalyzeService {
         } catch (SAXException e) {
             throw new BadFileStructure(e.getCause());
         } catch (IOException e) {
-            throw new FileNotFoundException(fileUrl);
+            throw new FileNotFoundException(e,fileUrl);
         }
     }
 }

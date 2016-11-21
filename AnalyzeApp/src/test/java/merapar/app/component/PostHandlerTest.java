@@ -32,8 +32,8 @@ public class PostHandlerTest {
 
     }
 
-    private void parseFile(String fileName) throws IOException, ParserConfigurationException, SAXException {
-        InputStream inputStream = PostHandlerTest.class.getResource(fileName).openStream();
+    private void parseFile(String fileName) throws Exception {
+        InputStream inputStream = ClassLoader.getSystemClassLoader().getResource(fileName).openStream();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(inputStream, underTest);
