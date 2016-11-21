@@ -1,3 +1,5 @@
+package integration;
+
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.jayway.restassured.response.Response;
 import merapar.app.Application;
@@ -25,17 +27,19 @@ import static org.springframework.http.HttpStatus.OK;
 public class AnalyzeIT {
 
     @Rule
-    public WireMockRule fileMock = new WireMockRule(8081);
+    public WireMockRule smallFileMock = new WireMockRule(8081);
+    @Rule
+    public WireMockRule realFileMock = new WireMockRule(8082);
 
     @Test
     public void should_analyze_real_file() throws Exception {
 
-        mockFile("real-file.xml");
+        mockFile("real-file.xml", realFileMock);
 
         Response response = given()
                 .header("Content-Type", "application/json")
                 .when()
-                .body(new AnalyzeRequestDTO(new URL("http://localhost:8081/real-file.xml")))
+                .body(new AnalyzeRequestDTO(new URL("http://localhost:8082/real-file.xml")))
                 .post("/analyze");
 
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
@@ -45,7 +49,7 @@ public class AnalyzeIT {
     @Test
     public void should_analyze_small_file_and_return_specified_result() throws Exception {
 
-        mockFile("small-file.xml");
+        mockFile("small-file.xml", smallFileMock);
 
         Response response = given()
                 .header("Content-Type", "application/json")
@@ -71,7 +75,7 @@ public class AnalyzeIT {
         assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST.value());
     }
 
-    private void mockFile(String fileName) {
+    private void mockFile(String fileName, WireMockRule fileMock) {
         fileMock.stubFor(
                 get(urlEqualTo("/" + fileName))
                         .willReturn(

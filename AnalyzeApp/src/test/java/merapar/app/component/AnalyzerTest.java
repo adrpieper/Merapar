@@ -1,6 +1,7 @@
 package merapar.app.component;
 
 import javafx.geometry.Pos;
+import org.junit.Before;
 import org.xml.sax.SAXException;
 import merapar.app.service.dto.AnalyzeDetailsDTO;
 import merapar.app.service.dto.AnalyzeDetailsDTOBuilder;
@@ -12,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import java.io.InputStream;
 
@@ -22,13 +25,24 @@ import static org.mockito.Mockito.*;
 public class AnalyzerTest {
 
     @Mock
+    private SAXParserFactory saxParserFactory;
+
+    @Mock
     private SAXParser saxParser;
+
     @Mock
     private InputStream inputStream;
+
     @Mock
     private PostHandler postHandler;
+
     @InjectMocks
     private Analyzer underTest;
+
+    @Before
+    public void setUp() throws Exception {
+        when(saxParserFactory.newSAXParser()).thenReturn(saxParser);
+    }
 
     @Test
     public void should_return_specified_details() throws Exception {

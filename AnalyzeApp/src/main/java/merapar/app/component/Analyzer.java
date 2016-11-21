@@ -6,25 +6,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Component
 public class Analyzer {
 
-    private final SAXParser saxParser;
+    private final SAXParserFactory saxParserFactory;
 
-    public Analyzer(SAXParser saxParser) {
-        this.saxParser = saxParser;
+    public Analyzer(SAXParserFactory saxParserFactory) {
+        this.saxParserFactory = saxParserFactory;
     }
 
     public AnalyzeDetailsDTO analyze(InputStream inputStream, PostHandler postHandler) {
         try {
-            saxParser.parse(inputStream, postHandler);
+            saxParserFactory.newSAXParser().parse(inputStream, postHandler);
             return  postHandler.getResults();
-        } catch (SAXException | IOException e) {
+        } catch (SAXException e) {
             throw new BadFileStructure(e.getCause());
+        } catch (IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 }

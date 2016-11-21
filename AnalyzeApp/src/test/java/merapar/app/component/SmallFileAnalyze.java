@@ -15,6 +15,7 @@ public class SmallFileAnalyze {
                 .withFirstPost(ZonedDateTime.of(2015,7,14,18,39,27,757000000, Clock.systemUTC().getZone()))
                 .withLastPost(ZonedDateTime.of(2015,8,14,22,2,58,73000000, Clock.systemUTC().getZone()))
                 .withTotalPosts(8)
+                .withTotalAcceptedPosts(2)
                 .build();
     }
 

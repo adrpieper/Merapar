@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 @SpringBootApplication
@@ -16,8 +15,7 @@ public class Application {
     }
 
     @Bean
-    public SAXParser saxParser() throws Exception{
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        return factory.newSAXParser();
+    public SAXParserFactory saxParserFactory() throws Exception{
+        return SAXParserFactory.newInstance();
     }
 }

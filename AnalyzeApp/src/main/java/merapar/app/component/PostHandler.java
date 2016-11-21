@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 public class PostHandler extends DefaultHandler {
     private long scoreSum;
     private int rows;
+    private int acceptedPosts;
     private LocalDateTime firstPost;
     private LocalDateTime lastPost;
 
@@ -23,6 +24,7 @@ public class PostHandler extends DefaultHandler {
         super.startDocument();
         scoreSum = 0;
         rows = 0;
+        acceptedPosts = 0;
         firstPost = LocalDateTime.MAX;
         lastPost = LocalDateTime.MIN;
     }
@@ -33,13 +35,11 @@ public class PostHandler extends DefaultHandler {
             if (qName.equalsIgnoreCase("row")) {
                 rows ++;
                 scoreSum += Integer.parseInt(attributes.getValue("Score"));
-                LocalDateTime creationDate = LocalDateTime.parse(attributes.getValue("CreationDate"));
-                if (creationDate.isBefore(firstPost)) {
-                    firstPost = creationDate;
+
+                if (attributes.getIndex("AcceptedAnswerId") != -1) {
+                    acceptedPosts++;
                 }
-                if (creationDate.isAfter(lastPost)) {
-                    lastPost= creationDate;
-                }
+                analyzeCreationDate(attributes.getValue("CreationDate"));
             }
         }catch (Exception e){
             throw new SAXException(e);
@@ -47,11 +47,22 @@ public class PostHandler extends DefaultHandler {
 
     }
 
+    private void analyzeCreationDate(String s) {
+        LocalDateTime creationDate = LocalDateTime.parse(s);
+        if (creationDate.isBefore(firstPost)) {
+            firstPost = creationDate;
+        }
+        if (creationDate.isAfter(lastPost)) {
+            lastPost= creationDate;
+        }
+    }
+
     public AnalyzeDetailsDTO getResults() {
         return new AnalyzeDetailsDTOBuilder()
                 .withAvgScore(getAvgScore())
                 .withFirstPost(toZonedDT(firstPost))
                 .withLastPost(toZonedDT(lastPost))
+                .withTotalAcceptedPosts(acceptedPosts)
                 .withTotalPosts(rows)
                 .build();
     }
