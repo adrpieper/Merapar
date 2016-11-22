@@ -16,18 +16,8 @@ public class PostHandler extends DefaultHandler {
     private long scoreSum;
     private int rows;
     private int acceptedPosts;
-    private LocalDateTime firstPost;
-    private LocalDateTime lastPost;
-
-    @Override
-    public void startDocument() throws SAXException {
-        super.startDocument();
-        scoreSum = 0;
-        rows = 0;
-        acceptedPosts = 0;
-        firstPost = LocalDateTime.MAX;
-        lastPost = LocalDateTime.MIN;
-    }
+    private LocalDateTime firstPost = LocalDateTime.MAX;
+    private LocalDateTime lastPost = LocalDateTime.MIN;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
