@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.ZonedDateTime;
@@ -41,9 +42,9 @@ public class AnalyzeServiceTest {
     public void should_analyze_without_exceptions () throws Exception {
 
         AnalyzeDetailsDTO expectedDetails = SmallFileAnalyze.getDetails();
-        when(analyzer.analyze( isA(BufferedInputStream.class), isA(PostHandler.class))).thenReturn(expectedDetails);
+        when(analyzer.analyze( isA(Analyzer.InputStreamSupplier.class), isA(PostHandler.class))).thenReturn(expectedDetails);
 
-        AnalyzeResponseDTO analyzeResponseDTO = underTest.analyzeFile(SmallFileAnalyze.getURL());
+        AnalyzeResponseDTO analyzeResponseDTO = underTest.analyzeFile(new URL("http://mockURL"));
 
         assertThat(analyzeResponseDTO.getDetails()).isEqualTo(expectedDetails);
         assertThat(analyzeResponseDTO.getAnalyseDate()).isBetween(ZonedDateTime.now().minusMinutes(5),ZonedDateTime.now());
@@ -51,6 +52,8 @@ public class AnalyzeServiceTest {
 
     @Test(expected = UrlNotFoundException.class)
     public void should_throw_file_not_found_when_url_cant_open () throws Exception {
+
+        when(analyzer.analyze( isA(Analyzer.InputStreamSupplier.class), isA(PostHandler.class))).thenThrow(IOException.class);
         underTest.analyzeFile(new URL("http://not_a_url"));
     }
 }

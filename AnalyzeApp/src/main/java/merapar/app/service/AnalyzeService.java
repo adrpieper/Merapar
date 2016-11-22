@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.time.ZonedDateTime;
 
@@ -27,13 +26,11 @@ public class AnalyzeService {
     public AnalyzeResponseDTO analyzeFile(URL fileUrl) {
         try {
             ZonedDateTime analyzeTime = ZonedDateTime.now();
-            InputStream inputStream = new BufferedInputStream(fileUrl.openStream());
             PostHandler postHandler = new PostHandler();
-            AnalyzeDetailsDTO detailsDTO = analyzer.analyze(inputStream, postHandler);
+            AnalyzeDetailsDTO detailsDTO = analyzer.analyze(() -> new BufferedInputStream(fileUrl.openStream()), postHandler);
             return new AnalyzeResponseDTO(analyzeTime, detailsDTO);
-
         } catch (IOException e) {
-            throw new UrlNotFoundException(fileUrl,e);
+           throw new UrlNotFoundException(fileUrl,e);
         }
     }
 }

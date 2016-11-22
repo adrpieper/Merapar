@@ -18,8 +18,4 @@ public class SmallFileAnalyze {
                 .withTotalAcceptedPosts(2)
                 .build();
     }
-
-    public static URL getURL(){
-        return ClassLoader.getSystemClassLoader().getResource("__files/small-file.xml");
-    }
 }

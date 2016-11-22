@@ -36,11 +36,7 @@ public class AnalyzeIT {
 
         mockFile("real-file.xml", realFileMock);
 
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .when()
-                .body(new AnalyzeRequestDTO(new URL("http://localhost:8082/real-file.xml")))
-                .post("/analyze");
+        Response response = request(new AnalyzeRequestDTO(new URL("http://localhost:8082/real-file.xml")));
 
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
         response.getBody().as(AnalyzeResponseDTO.class);
@@ -51,11 +47,7 @@ public class AnalyzeIT {
 
         mockFile("small-file.xml", smallFileMock);
 
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .when()
-                .body(new AnalyzeRequestDTO(new URL("http://localhost:8081/small-file.xml")))
-                .post("/analyze");
+        Response response = request(new AnalyzeRequestDTO(new URL("http://localhost:8081/small-file.xml")));
 
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
         AnalyzeResponseDTO responseDTO = response.getBody().as(AnalyzeResponseDTO.class);
@@ -66,12 +58,7 @@ public class AnalyzeIT {
     @Test
     public void should_return_bad_request_when_url_is_bad() throws Exception
     {
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .when()
-                .body(new JSONObject().put("url","not_a_url").toString())
-                .post("/analyze");
-
+        Response response = request(new JSONObject().put("url","not_a_url").toString());
         assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST.value());
     }
 
@@ -85,5 +72,13 @@ public class AnalyzeIT {
                                         .withBodyFile(fileName)
                         )
         );
+    }
+
+    private Response request(Object body) {
+        return given()
+                .header("Content-Type", "application/json")
+                .when()
+                .body(body)
+                .post("/analyze");
     }
 }

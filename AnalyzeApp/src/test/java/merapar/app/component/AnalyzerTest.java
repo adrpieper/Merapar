@@ -21,6 +21,9 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class AnalyzerTest {
 
+    @InjectMocks
+    private Analyzer underTest;
+
     @Mock
     private SAXParserFactory saxParserFactory;
 
@@ -31,14 +34,15 @@ public class AnalyzerTest {
     private InputStream inputStream;
 
     @Mock
-    private PostHandler postHandler;
+    private Analyzer.InputStreamSupplier inputStreamSupplier;
 
-    @InjectMocks
-    private Analyzer underTest;
+    @Mock
+    private PostHandler postHandler;
 
     @Before
     public void setUp() throws Exception {
         when(saxParserFactory.newSAXParser()).thenReturn(saxParser);
+        when(inputStreamSupplier.openStream()).thenReturn(inputStream);
     }
 
     @Test
@@ -47,7 +51,7 @@ public class AnalyzerTest {
         AnalyzeDetailsDTO expectedDetailsDTO = new AnalyzeDetailsDTOBuilder().build();
         when(postHandler.getResults()).thenReturn(expectedDetailsDTO);
 
-        AnalyzeDetailsDTO result = underTest.analyze(inputStream, postHandler);
+        AnalyzeDetailsDTO result = underTest.analyze(inputStreamSupplier, postHandler);
 
         verify(saxParser).parse(inputStream, postHandler);
         assertThat(result).isEqualTo(expectedDetailsDTO);
@@ -56,9 +60,7 @@ public class AnalyzerTest {
 
     @Test(expected = BadFileStructure.class)
     public void should_throw_BadFileStructure_when_parsing_throw_SAXException() throws Exception {
-
-
         doThrow(new SAXException()).when(saxParser).parse(inputStream, postHandler);
-        underTest.analyze(inputStream, postHandler);
+        underTest.analyze(inputStreamSupplier, postHandler);
     }
 }
